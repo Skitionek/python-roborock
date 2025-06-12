@@ -1,10 +1,6 @@
 import base64
 import logging
 
-from vacuum_map_parser_base.config.color import ColorsPalette
-from vacuum_map_parser_base.config.image_config import ImageConfig
-from vacuum_map_parser_base.config.size import Sizes
-
 from roborock.cloud_api import RoborockMqttClient
 
 from ..containers import DeviceData, UserData
@@ -87,6 +83,9 @@ class RoborockMqttClientV1(RoborockMqttClient, RoborockClientV1):
 
     async def _get_calibration_points(self):
         from vacuum_map_parser_roborock.map_data_parser import RoborockMapDataParser
+        from vacuum_map_parser_base.config.color import ColorsPalette
+        from vacuum_map_parser_base.config.image_config import ImageConfig
+        from vacuum_map_parser_base.config.size import Sizes
         map: bytes = await self.send_command(RoborockCommand.GET_MAP_V1)
         parser = RoborockMapDataParser(ColorsPalette(), Sizes(), [], ImageConfig(), [])
         parsed_map = parser.parse(map)
